@@ -1,16 +1,19 @@
-# Telegram Airdrop Bot
+# Easy Telegram Airdrop Bot
 
-This bot has all you need and very simple to use!
+This bot has all you need, very simple to use and easy to deploy!
+
+
 ### Some of the great futures
 
-- Ask user to follow twitter and join telegram groups, multipe groups and twitter links are supported.
+- Ask user to follow twitter and join telegram groups, multiple groups and twitter links are supported.
 - Check if a correct wallet address has been provided
 - Very easy to use.
 - Persistance, the chat will remain persistant even if you restart the bot.
 - Blocks duplicate wallets & twitter usernames
-- Refferal support
+- Referral support
 - Start, stop, pause airdrop anytime.
 - Captcha support
+
 
 ### Admin Commands
 
@@ -18,14 +21,17 @@ This bot has all you need and very simple to use!
 - `/stats` Returns number of participants, referrals, distribution amounts
 - `/bot stop|pause|start` Manage airdrop status; stop, pause or start.
 
-## Installation with Docker
-- [Edit the .env.example file](#env-file)
-- Run `cp .env.example .env`
-- Run `docker-compose up -d`
-- That's all!
+
+## Deploy and Host to Heroku
+
+<p><a href="https://heroku.com/deploy?template=https://github.com/mujadmani/Telegram-Airdrop-Bot"> <img src="https://img.shields.io/badge/Deploy%20To%20Heroku-red?style=for-the-badge&logo=heroku" width="220" height="38.45"/></a></p>
+
+The easiest way to deploy this bot is using Heroku. 
+Don't forget to switch on the bot under "Resources" panel. See example below:<br>
+<p align="center"><img align="center" src="./images/on.png" width="60%" height="60%"></p>
+
 
 ## Env Variables
-### Important
 
 - `COIN_SYMBOL` Is the coin symbol
     - Example: `BNB, ETH`
@@ -35,18 +41,20 @@ This bot has all you need and very simple to use!
     - Example: `10000` *do not* include "," must be float number
 - `AIRDROP_DATE` Date of reward distrubition
     - Example: `20 July 2021`
+- `AIRDROP_NETWORK` In which network/chain are you going to give?
+    - Example: `Binance Smart Chain`
 - `BOT_TOKEN` The token you get from @BotFather
     - Example: `1313552295:AAFxDGKhlco-FoWw-uyxInotlKvalidNEz-Q`
 - `COIN_PRICE` Current price of coin
     - Example: `$0.01`
 - `REFERRAL_REWARD` Extra reward participants will get for each referral
     - Example: `1000`
-- `WEBSITE_URL` Your website url
+- `WEBSITE_URL` Your website URL
     - Example: `https://bitcoin.com`
-- `EXPLORER_URL` Blockchain explorer url
-    - Example: `https://etherscan.io/address/0x0000000000000000000000000000000000000000`
+- `EXPLORER_URL` Blockchain explorer URL
+    - Example: `https://bscscan.com/address/0x0000000000000000000000000000000000000000`
 - `ADMIN_USERNAME` Your telegram username
-    - Example: `johnboe`
+    - Example: `johndoe`
 - `MAX_USERS` Maximum number of participants
     - Example: `1000` *do not* include "," must be float number
 - `MAX_REFS` Maximum number of referrals per participant
@@ -59,17 +67,20 @@ This bot has all you need and very simple to use!
 - `TELEGRAM_LINKS` Telegram group links seperated by comma
     - Example: `https://t.me/single,`
     - Example: `https://t.me/multi,https://t.me/ple`
+- `DB_URI` Get one from https://cloud.mongodb.com/. Replace `<username>` and `<password>`
+    - Example: `mongodb+srv://<username>:<password>@cluster0.abcde.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`
 
 
-### Not Very Important
+## MongoDB Easy Tutorial
 
-Leave these to default unless you know what you do.
+Watch: https://www.youtube.com/watch?v=Ej05tq1220A
 
-- `MONGO_INITDB_ROOT_USERNAME` Mongodb username
-- `MONGO_INITDB_ROOT_USERNAME` Mongodb password
-- `MONGO_INITDB_IP` Mongodb IP
-- `MONGO_INITDB_PORT` Mongodb Port
 
 ## Some Screenshots
-![1](./images/1.jpg)
-![1](./images/2.jpg)
+
+<img src="./images/1.jpg" width="40%" height="40%">  <img src="./images/2.jpg" width="40%" height="40%">
+
+
+## Tips and Airdrops are appreciated
+
+### 0x373e8228cb85d2bf80f5d948620d6192ecc33889
