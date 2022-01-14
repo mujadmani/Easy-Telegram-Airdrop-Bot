@@ -24,7 +24,7 @@ This bot has all you need, very simple to use and easy to deploy!
 
 ## Deploy and Host to Heroku
 
-<p><a href="https://heroku.com/deploy?template=https://github.com/mujadmani/Telegram-Airdrop-Bot"> <img src="https://img.shields.io/badge/Deploy%20To%20Heroku-red?style=for-the-badge&logo=heroku" width="220" height="38.45"/></a></p>
+<p><a href="https://heroku.com/deploy?template=https://github.com/mujadmani/Easy-Telegram-Airdrop-Bot"> <img src="https://img.shields.io/badge/Deploy%20To%20Heroku-red?style=for-the-badge&logo=heroku" width="220" height="38.45"/></a></p>
 
 The easiest way to deploy this bot is using Heroku. 
 Don't forget to switch on the bot under "Resources" panel. See example below:<br>
