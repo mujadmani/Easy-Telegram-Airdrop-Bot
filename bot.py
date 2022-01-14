@@ -33,10 +33,7 @@ AIRDROP_NETWORK = os.environ["AIRDROP_NETWORK"]
 REFERRAL_REWARD = float(os.environ["REFERRAL_REWARD"])
 COIN_PRICE = os.environ["COIN_PRICE"]
 WEBSITE_URL = os.environ["WEBSITE_URL"]
-MONGO_USER = os.environ["MONGO_INITDB_ROOT_USERNAME"]
-MONGO_PASSWORD = os.environ["MONGO_INITDB_ROOT_PASSWORD"]
-MONGO_IP = os.environ["MONGO_INITDB_IP"]
-MONGO_PORT = os.environ["MONGO_INITDB_PORT"]
+DB_URI = os.environ["DB_URI"]
 EXPLORER_URL = os.environ["EXPLORER_URL"]
 ADMIN_USERNAME = os.environ["ADMIN_USERNAME"]
 
@@ -58,7 +55,7 @@ else:
     BOT_STATUS = {"status": "ON"}
 
 # %% MONGODB CONNECTION
-CONNECTION_STRING = f"mongodb://{MONGO_USER}:{MONGO_PASSWORD}@{MONGO_IP}:{MONGO_PORT}/?authSource=admin"
+CONNECTION_STRING = os.environ.get("DB_URI")
 myclient = pymongo.MongoClient(CONNECTION_STRING)
 mydb = myclient["airdrop"]
 users = mydb["users"]
