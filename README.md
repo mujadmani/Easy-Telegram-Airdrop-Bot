@@ -43,7 +43,7 @@ Don't forget to switch on the bot under "Resources" panel. See example below:<br
     - Example: `20 July 2021`
 - `AIRDROP_NETWORK` In which network/chain are you going to give?
     - Example: `Binance Smart Chain`
-- `BOT_TOKEN` The token you get from @BotFather
+- `BOT_TOKEN` The token you get from @BotFather (https://telegram.me/BotFather)
     - Example: `1313552295:AAFxDGKhlco-FoWw-uyxInotlKvalidNEz-Q`
 - `COIN_PRICE` Current price of coin
     - Example: `$0.01`
