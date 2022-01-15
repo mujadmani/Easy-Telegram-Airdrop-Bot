@@ -40,7 +40,7 @@
       "value": "Binance Smart Chain"
     },
     "BOT_TOKEN": {
-      "description": "The token you get from @BotFather. Example: 1313552295:AAFxDGKhlco-FoWw-uyxInotlKvalidNEz-Q",
+      "description": "The token you get from @BotFather (https://telegram.me/BotFather). Example: 1313552295:AAFxDGKhlco-FoWw-uyxInotlKvalidNEz-Q",
       "required": true
     },
     "COIN_PRICE": {
