@@ -39,14 +39,17 @@ ADMIN_USERNAME = os.environ["ADMIN_USERNAME"]
 
 TWITTER_LINKS = os.environ["TWITTER_LINKS"]
 TELEGRAM_LINKS = os.environ["TELEGRAM_LINKS"]
+DISCORD_LINKS = os.environ["DISCORD_LINKS"]
 MAX_USERS = int(os.environ["MAX_USERS"])
 MAX_REFS = int(os.environ["MAX_REFS"])
 CAPTCHA_ENABLED = os.environ["CAPTCHA_ENABLED"]
 
 TWITTER_LINKS = TWITTER_LINKS.split(",")
 TELEGRAM_LINKS = TELEGRAM_LINKS.split(",")
+DISCORD_LINKS = DISCORD_LINKS.split(",")
 TWITTER_LINKS = "\n".join(TWITTER_LINKS)
 TELEGRAM_LINKS = "\n".join(TELEGRAM_LINKS)
+DISCORD_LINKS = "\n".join(DISCORD_LINKS)
 STATUS_PATH = "./conversationbot/botconfig.p"
 if os.path.exists(STATUS_PATH):
     BOT_STATUS = {}
@@ -81,7 +84,7 @@ if(WEBSITE_URL != ""):
 WELCOME_MESSAGE = f"""
 Hello, NAME! I am your friendly {COIN_NAME} Airdrop bot
 {SYMBOL}
-🔸For Joining - Get {AIRDROP_AMOUNT} {COIN_SYMBOL}
+⭐️ For Joining - Get {AIRDROP_AMOUNT} {COIN_SYMBOL}
 ⭐️ For each referral - Get {"{:,.2f}".format(REFERRAL_REWARD)} {COIN_SYMBOL}
 
 📘By Participating you are agreeing to the {COIN_NAME} (Airdrop) Program Terms and Conditions. Please see pinned post for more information.
@@ -95,30 +98,40 @@ PROCEED_MESSAGE = f"""
 📢 Airdrop Rules
 
 ✏️ Mandatory Tasks:
-- Join our telegram channels
-- Follow our Twitter page
+- Join our Telegram group(s)
+- Follow our Twitter page(s)
+- Join our Discord server(s)
 
-NOTE: Users found Cheating would be disqualified & banned immediately.
+NOTE: Users found cheating would be disqualified & banned immediately.
 
 Airdrop Date: *{AIRDROP_DATE}*{EXPLORER_URL}
 {WEBSITE_URL}
 """
 
 MAKE_SURE_TELEGRAM = f"""
-Do no forget to join our Telegram channel
+🔹 Do not forget to join our Telegram group(s)
 {TELEGRAM_LINKS}
 """
 
 FOLLOW_TWITTER_TEXT = f"""
-🔹 Follow our Twitter page
+🔹 Follow our Twitter page(s)
 {TWITTER_LINKS}
 """
 
+JOIN_DISCORD_TEXT = f'''
+🔹 Join our Discord server(s)
+{DISCORD_LINKS}
+'''
 
 SUBMIT_BEP20_TEXT = f"""
 Type in *your Wallet Address*
 
 Please make sure your wallet supports the *{AIRDROP_NETWORK}*
+
+Example:
+0xdEAD000000000000000042069420694206942069
+
+_Incorrect Details? Use_ /restart _command to start over._
 """
 
 JOINED = f"""
@@ -135,7 +148,7 @@ REPLACEME
 
 WITHDRAWAL_TEXT = f"""
 Withdrawals would be sent out automatically to your {AIRDROP_NETWORK} address on the {AIRDROP_DATE}
-NOTE: Users found Cheating would be disqualified & banned immediately."""
+NOTE: Users found cheating would be disqualified & banned immediately."""
 
 BALANCE_TEXT = f"""
 {COIN_NAME} Airdrop Balance: *IARTBALANCE*
@@ -195,6 +208,7 @@ def checkCaptcha(update, context):
 
 
 def start(update, context):
+    update.message.reply_text(text="Starting bot",reply_markup=ReplyKeyboardMarkup([["/start"]]))
     user = update.message.from_user
     CAPTCHA_DATA[user.id] = False
     if not user.id in USERINFO:
@@ -243,7 +257,7 @@ def generateCaptcha(update, context):
     image.save(filename, "png")
     photo = open(filename, "rb")
     update.message.reply_photo(photo)
-    update.message.reply_text("Please type in the numbers on the image")
+    update.message.reply_text("Please type in the numbers on the image",reply_markup=ReplyKeyboardRemove())
     return CAPTCHASTATE
 
 
@@ -256,29 +270,65 @@ def submit_details(update, context):
 
 
 def follow_telegram(update, context):
-    update.message.reply_text(text=MAKE_SURE_TELEGRAM, parse_mode=telegram.ParseMode.MARKDOWN)
+    update.message.reply_text(text=MAKE_SURE_TELEGRAM)
     update.message.reply_text(text="Please click on \"Done\" to proceed", parse_mode=telegram.ParseMode.MARKDOWN, reply_markup=ReplyKeyboardMarkup(
         [["Done"], ["Cancel"]]
     ))
 
     return FOLLOW_TWITTER
 
+def check_joined_channel(user):
+    try:
+        for link in TELEGRAM_LINKS.split("\n"):
+            link ="@"+link.split("/")[-1]
+            reply = telegram.bot.Bot(BOT_TOKEN).get_chat_member(link,user)
+            if reply.status in ('left','kicked'):
+                return False
+    except:
+        return False
+    return True
 
 def follow_twitter(update, context):
+    if not check_joined_channel(user = update.message.from_user.id):
+            update.message.reply_text(text=f'You have not joined\n {TELEGRAM_LINKS}\nPlease join first and click on "Done" to proceed', reply_markup=ReplyKeyboardMarkup(
+                [["Done"], ["Cancel"],["/restart"]]
+            ))
+            return FOLLOW_TWITTER
     update.message.reply_text(text=FOLLOW_TWITTER_TEXT, parse_mode=telegram.ParseMode.MARKDOWN)
-    update.message.reply_text(text="Type in *your Twitter username* to proceed", parse_mode=telegram.ParseMode.MARKDOWN, reply_markup=ReplyKeyboardMarkup(
+    update.message.reply_text(text="Type in the link to *your Twitter profile* to proceed.\n\nExample: \nhttps://twitter.com/example", parse_mode=telegram.ParseMode.MARKDOWN, reply_markup=ReplyKeyboardMarkup(
         [["Cancel"]]
     ))
-    return SUBMIT_ADDRESS
+    return JOIN_DISCORD
 
 
 def submit_address(update, context):
     user = update.message.from_user
     if not user.id in USERINFO:
         return startAgain(update, context)
+    if users.find({"twitter_username": update.message.text.strip()}).count() != 0:
+        update.message.reply_text(text="Twitter Link Already Exists. Try again!\n\nExample: \nhttps://twitter.com/example", parse_mode=telegram.ParseMode.MARKDOWN, reply_markup=ReplyKeyboardMarkup(
+            [["Cancel"]]
+        ))
+        return JOIN_DISCORD
     USERINFO[user.id].update({"twitter_username": update.message.text.strip()})
+    update.message.reply_text(text=JOIN_DISCORD_TEXT, parse_mode=telegram.ParseMode.MARKDOWN)
+    update.message.reply_text(text="Type in *your Discord username* to proceed.\n\nExample: \nExample#1234 \n\n_Incorrect Details? Use_ /restart _command to start over._", parse_mode=telegram.ParseMode.MARKDOWN, reply_markup=ReplyKeyboardMarkup(
+        [["Cancel"],["/restart"]]
+    ))
+    return SUBMIT_ADDRESS
+
+def submit_discord(update, context):
+    user = update.message.from_user
+    if not user.id in USERINFO:
+        return startAgain(update, context)
+    if users.find({"discord_username": update.message.text.strip()}).count() != 0:
+        update.message.reply_text(text="Discord Username Already Exists. Try again!\n\nExample: \nExample#1234", parse_mode=telegram.ParseMode.MARKDOWN, reply_markup=ReplyKeyboardMarkup(
+            [["Cancel"],["/restart"]]
+        ))
+        return SUBMIT_ADDRESS
+    USERINFO[user.id].update({"discord_username": update.message.text.strip()})
     update.message.reply_text(text=SUBMIT_BEP20_TEXT, parse_mode=telegram.ParseMode.MARKDOWN, reply_markup=ReplyKeyboardMarkup(
-        [["Cancel"]]
+        [["Cancel"],["/restart"]]
     ))
     return END_CONVERSATION
 
@@ -297,6 +347,11 @@ def end_conversation(update, context):
     user = update.message.from_user
     if not user.id in USERINFO:
         return startAgain(update, context)
+    if users.find({"bep20": update.message.text}).count() != 0:
+        update.message.reply_text(text="Wallet Address Already Exists. Try again!\n\nExample: \n0xdEAD000000000000000042069420694206942069", parse_mode=telegram.ParseMode.MARKDOWN, reply_markup=ReplyKeyboardMarkup(
+        [["Cancel"],["/restart"]]
+    ))
+        return END_CONVERSATION
     USERINFO[user.id].update({"bep20": update.message.text})
     USERINFO[user.id].update({"userId": user.id})
     USERINFO[user.id].update({"chatId": update.effective_chat.id})
@@ -388,7 +443,7 @@ Here is *your referral link*
 [https://t.me/{context.bot.username}?start={user.id}](https://t.me/{context.bot.username}?start={user.id})
 """
 
-    if(message == "Quit Airdrop"):
+    if(message == "❌ Quit Airdrop"):
         update.message.reply_text("Are you sure want to quit the Airdrop? All your data will be deleted", reply_markup=ReplyKeyboardMarkup([['YES'], ['NO']]))
         return SUREWANTTO
 
@@ -399,11 +454,16 @@ Here is *your referral link*
         refferals = str(info["refCount"])
         bep20Address = str(info["bep20"])
         twitterUsername = str(info["twitter_username"])
+        discordUsername = str(info.get("discord_username",""))
         reply = f"""
 Name: {name}
 Referrals: {refferals}
 {AIRDROP_NETWORK} address: {bep20Address}
 Twitter Username: {twitterUsername}
+Discord Username: {discordUsername}
+
+_Incorrect Details? Use_ /restart _command to start over._
+Don't worry, your referrals are safe.
 """
     if(reply == ""):
         joke = getRandomJoke()
@@ -416,31 +476,76 @@ I'm not sure what you meant, but here is a joke for you!
     update.message.reply_text(reply, reply_markup=ReplyKeyboardMarkup(reply_keyboard), parse_mode=telegram.ParseMode.MARKDOWN)
     return LOOP
 
+def error_airdrop(update, context):
+    update.message.reply_text("Please click \"🚀 Join Airdrop\" to proceed",reply_markup=ReplyKeyboardMarkup([['🚀 Join Airdrop']]),)
+    return PROCEED
 
+def error_submitdetails(update, context):
+    update.message.reply_text("Please click on \"Submit Details\" to proceed, or \"Cancel\" to cancel the Airdrop",reply_markup=ReplyKeyboardMarkup(
+        [["Submit Details"], ["Cancel"]]
+    ))
+    return FOLLOW_TELEGRAM
+
+def error_telegram(update,context):
+    update.message.reply_text('Please click on "Done" to proceed, or "Cancel" to cancel the Airdrop',reply_markup=ReplyKeyboardMarkup(
+        [["Done"], ["Cancel"]]
+    ))
+    return FOLLOW_TWITTER
+
+def error_twitter(update,context):
+    update.message.reply_text(text="Invalid Twitter Link. Try again! \n\nExample: \nhttps://twitter.com/example", parse_mode=telegram.ParseMode.MARKDOWN, reply_markup=ReplyKeyboardMarkup(
+        [["Cancel"]]
+    ))
+    return JOIN_DISCORD
+
+def error_discord(update,context):
+    update.message.reply_text(text="Invalid Discord Username. Try again!\n\nExample: \nExample#1234", parse_mode=telegram.ParseMode.MARKDOWN, reply_markup=ReplyKeyboardMarkup(
+        [["Cancel"],["/restart"]]
+    ))
+    return SUBMIT_ADDRESS
+
+def error_bsc(update,context):
+    update.message.reply_text(text="Invalid Wallet Address. Try again!\n\nExample: \n0xdEAD000000000000000042069420694206942069", parse_mode=telegram.ParseMode.MARKDOWN, reply_markup=ReplyKeyboardMarkup(
+        [["Cancel"],["/restart"]]
+    ))
+    return END_CONVERSATION
+
+def restart(update,context):
+    try:
+        users.delete_one({"userId": update.message.from_user.id})
+    except:
+        pass
+    return start(update,context)
 # %% Start bot
 reply_keyboard = [
     ["💰 Balance", "ℹ️ Airdrop Info"],
     ["💸 Withdrawal", "🔗 Ref Link"],
-    ["💾 My Data", "Quit Airdrop"]
+    ["💾 My Data", "❌ Quit Airdrop"]
 ]
-PROCEED, FOLLOW_TELEGRAM, FOLLOW_TWITTER, SUBMIT_ADDRESS, END_CONVERSATION, LOOP, SUREWANTTO, CAPTCHASTATE = range(8)
+PROCEED, FOLLOW_TELEGRAM, FOLLOW_TWITTER, SUBMIT_ADDRESS, JOIN_DISCORD,END_CONVERSATION, LOOP, SUREWANTTO, CAPTCHASTATE = range(9)
 cancelHandler = MessageHandler(Filters.regex('^Cancel$'), cancel)
+reset_handler = CommandHandler('restart',restart)
 states = {
-    PROCEED: [MessageHandler(Filters.regex('^🚀 Join Airdrop$'), submit_details), cancelHandler],
-    FOLLOW_TELEGRAM: [MessageHandler(Filters.regex('^Submit Details$'), follow_telegram), cancelHandler],
-    FOLLOW_TWITTER: [MessageHandler(Filters.regex('^Done$'), follow_twitter), cancelHandler],
-    SUBMIT_ADDRESS: [cancelHandler, MessageHandler(Filters.text, submit_address)],
-    END_CONVERSATION: [cancelHandler, MessageHandler(Filters.regex('^0x[a-fA-F0-9]{40}$'), end_conversation)],
-    LOOP: [MessageHandler(
+    PROCEED: [MessageHandler(Filters.regex('^🚀 Join Airdrop$'), submit_details), cancelHandler,reset_handler, MessageHandler(Filters.regex(".*"),error_airdrop)],
+    FOLLOW_TELEGRAM: [MessageHandler(Filters.regex('^Submit Details$'), follow_telegram), cancelHandler,reset_handler, MessageHandler(Filters.regex(".*"),error_submitdetails)],
+    FOLLOW_TWITTER: [MessageHandler(Filters.regex('^Done$'), follow_twitter), cancelHandler,reset_handler, MessageHandler(Filters.regex(".*"),error_telegram)],
+    JOIN_DISCORD : [cancelHandler,MessageHandler(Filters.regex('^https://twitter.com/.*'), submit_address),reset_handler,MessageHandler(Filters.regex(".*"),error_twitter)],
+    SUBMIT_ADDRESS: [cancelHandler, MessageHandler(Filters.regex('^.*#[0-9]{4}$'), submit_discord),reset_handler,MessageHandler(Filters.regex(".*"),error_discord)],
+    END_CONVERSATION: [cancelHandler, MessageHandler(Filters.regex('^0x[a-fA-F0-9]{40}$'), end_conversation),reset_handler,MessageHandler(Filters.regex(".*"),error_bsc)],
+    LOOP: [reset_handler,MessageHandler(
         Filters.text, loopAnswer
     )],
     SUREWANTTO: [MessageHandler(Filters.regex('^(YES|NO)$'), sureWantTo)],
     CAPTCHASTATE: [MessageHandler(Filters.text, checkCaptcha)]
 }
 
+def error_start(update,context):
+    update.message.reply_text(text="Use /start command to start the Airdrop bot",parse_mode=telegram.ParseMode.MARKDOWN, reply_markup=ReplyKeyboardMarkup(
+        [["/start"]]
+    ))
 
 conv_handler = ConversationHandler(
-    entry_points=[CommandHandler('start', start)],
+    entry_points=[CommandHandler('start', start),MessageHandler(Filters.text,error_start)],
     states=states,
     fallbacks=[],
     name="main",
@@ -449,6 +554,10 @@ conv_handler = ConversationHandler(
 
 
 # %% Admin commands
+def get_refcount_balance(userid):
+    info = getUserInfo(userid)
+    return info["refCount"],float(info["refCount"])*float(REFERRAL_REWARD) + float(AIRDROP_AMOUNT.replace(",",""))
+
 def getList(update, context):
     user = update.message.from_user
     if(user.username != ADMIN_USERNAME):
@@ -458,6 +567,7 @@ def getList(update, context):
     with open("users.json", "w") as file:
         file.write("[")
         for document in list:
+            document["refcount"],document["balance"] = get_refcount_balance(document["userId"])
             file.write(dumps(document))
             file.write(",")
         file.write("]")
