@@ -3,7 +3,7 @@
 This bot has all you need, very simple to use and easy to deploy!
 
 
-### Some of the great futures
+### Some of the great features
 
 - Ask user to follow twitter and join telegram groups, multiple groups and twitter links are supported.
 - Check if a correct wallet address has been provided
