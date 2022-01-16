@@ -15,6 +15,17 @@ This bot has all you need, very simple to use and easy to deploy!
 - Captcha support
 
 
+### More added features [Updated]
+
+- Ask user to join Discord server, multiple links are supported.
+- Gives errors when irrelevant commands are used
+- Checks and verifies if user is in the group/channel before proceeding
+- Validates and gives error messages for Twitter user link, Discord username, and Wallet address
+- Gives error when duplicate Twitter usernames, Discord usernames or Wallet addresses are input
+- /restart command to start over the process if user inputs incorrect details. Referrals aren't lost, they are still safe.
+- 2 more object names for /list .json file, i.e. Total balance and Referral count of the user
+
+
 ### Admin Commands
 
 - `/list` Returns the list of all participants in json format.
@@ -67,6 +78,9 @@ Don't forget to switch on the bot under "Resources" panel. See example below:<br
 - `TELEGRAM_LINKS` Telegram group links seperated by comma
     - Example: `https://t.me/single,`
     - Example: `https://t.me/multi,https://t.me/ple`
+- `DISCORD_LINKS` Discord server links seperated by comma
+    - Example: `https://discord.gg/example,`
+    - Example: `https://discord.gg/multi,https://discord.gg/ple`
 - `DB_URI` Get one from https://cloud.mongodb.com/. Replace `<username>` and `<password>`
     - Example: `mongodb+srv://<username>:<password>@cluster0.abcde.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`
 
@@ -74,6 +88,11 @@ Don't forget to switch on the bot under "Resources" panel. See example below:<br
 ## MongoDB Easy Tutorial
 
 Watch: https://www.youtube.com/watch?v=Ej05tq1220A
+
+
+## Convert JSON to CSV or XLS
+
+Go: https://www.convertcsv.com/json-to-csv.htm
 
 
 ## Some Screenshots
