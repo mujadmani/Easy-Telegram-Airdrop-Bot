@@ -1,5 +1,5 @@
 {
-  "name": "Easy-Telegram-Airdrop-Bot",
+  "name": "Telegram-Airdrop-Bot",
   "logo": "https://miro.medium.com/max/1400/1*6A_cOfu7NqZZl16RJxEwSw.png",
   "description": "Very simple telegram airdrop bot with Heroku",
   "keywords": ["airdrop", "cryptocurrency", "telegram", "bot"],
@@ -36,11 +36,11 @@
     },
     "AIRDROP_NETWORK": {
       "description": "In which network/chain are you going to give? Example: Binance Smart Chain",
-      "required": true,
+      "required": false,
       "value": "Binance Smart Chain"
     },
     "BOT_TOKEN": {
-      "description": "The token you get from @BotFather (https://telegram.me/BotFather). Example: 1313552295:AAFxDGKhlco-FoWw-uyxInotlKvalidNEz-Q",
+      "description": "The token you get from @BotFather. Example: 1313552295:AAFxDGKhlco-FoWw-uyxInotlKvalidNEz-Q",
       "required": true
     },
     "COIN_PRICE": {
@@ -55,12 +55,12 @@
     },
     "WEBSITE_URL": {
       "description": "Website URL",
-      "required": true,
+      "required": false,
       "value": "https://bitcoinbutitsjustababy.com"
     },    
     "EXPLORER_URL": {
       "description": "Blockchain explorer URL",
-      "required": true,
+      "required": false,
       "value": "https://bscscan.com/address/0x0000000000000000000000000000000000000000"
     },     
     "ADMIN_USERNAME": {
@@ -91,6 +91,11 @@
       "description": "Twitter page links seperated by comma. Single Example: https://t.me/single. Multiple Example: https://t.me/multi,https://t.me/ple",
       "required": true,
       "value": "https://t.me/multi,https://t.me/ple"
+    },
+    "DISCORD_LINKS": {
+      "description": "Discord server links seperated by comma. Single Example: https://discord.gg/example. Multiple Example: https://discord.gg/example,https://discord.gg/ple",
+      "required": true,
+      "value": "https://discord.gg/example"
     },
     "DB_URI": {
       "description": "Get one from https://cloud.mongodb.com/. Replace <username> and <password>. Example: mongodb+srv://<username>:<password>@cluster0.abcde.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
