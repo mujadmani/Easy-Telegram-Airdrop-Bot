@@ -23,7 +23,7 @@ This bot has all you need, very simple to use and easy to deploy!
 - Validates and gives error messages for Twitter user link, Discord username, and Wallet address
 - Gives error when duplicate Twitter usernames, Discord usernames or Wallet addresses are input
 - /restart command to start over the process if user inputs incorrect details. Referrals aren't lost, they are still safe.
-- 2 more object names for /list .json file, i.e. Total balance and Referral count of the user
+- 3 more object names for /list .json file, i.e. Total balance, Referral count of the user and Discord username
 
 
 ### Admin Commands
