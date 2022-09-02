@@ -101,6 +101,7 @@ PROCEED_MESSAGE = f"""
 - Join our Telegram group(s)
 - Follow our Twitter page(s)
 - Join our Discord server(s)
+- Signup To our Website {WEBSITE_URL}
 
 NOTE: Users found cheating would be disqualified & banned immediately.
 
@@ -141,6 +142,7 @@ Rewards would be sent out automatically to your {AIRDROP_NETWORK} address on the
 Don't forget to:
 🔸 Stay in the telegram channels
 🔸 Follow all the social media channels for the updates
+🔸 Signup to website {WEBSITE_URL}
 
 Your personal referral link (+{"{:,.2f}".format(REFERRAL_REWARD)} {COIN_SYMBOL} for each referral)
 REPLACEME
